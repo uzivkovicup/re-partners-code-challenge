@@ -1,0 +1,865 @@
+<!DOCTYPE html>
+<html lang="en">
+<head>
+    <meta charset="UTF-8">
+    <meta name="viewport" content="width=device-width, initial-scale=1.0">
+    <title>Pack Optimizer Pro</title>
+    <link rel="stylesheet" href="https://cdnjs.cloudflare.com/ajax/libs/font-awesome/6.4.0/css/all.min.css">
+    <link href="https://fonts.googleapis.com/css2?family=Poppins:wght@300;400;500;600;700&display=swap" rel="stylesheet">
+    <style>
+        :root {
+            --primary: #4361ee;
+            --primary-light: #4895ef;
+            --primary-dark: #3f37c9;
+            --secondary: #4cc9f0;
+            --success: #4ade80;
+            --danger: #f43f5e;
+            --warning: #fb923c;
+            --dark: #1e293b;
+            --light: #f8fafc;
+            --gray: #94a3b8;
+            --card-shadow: 0 10px 15px -3px rgba(0, 0, 0, 0.1), 0 4px 6px -2px rgba(0, 0, 0, 0.05);
+            --transition: all 0.3s ease;
+        }
+        
+        * {
+            box-sizing: border-box;
+            margin: 0;
+            padding: 0;
+        }
+        
+        html {
+            height: 100%;
+        }
+        
+        body {
+            font-family: 'Poppins', sans-serif;
+            line-height: 1.6;
+            color: var(--dark);
+            background-color: #f1f5f9;
+            padding: 0;
+            margin: 0;
+            min-height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .container {
+            max-width: 1200px;
+            margin: 0 auto;
+            padding: 0 20px;
+            width: 100%;
+        }
+        
+        header {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 2rem 0;
+            box-shadow: 0 4px 6px -1px rgba(0, 0, 0, 0.1);
+        }
+        
+        .header-content {
+            display: flex;
+            align-items: center;
+            justify-content: space-between;
+        }
+        
+        .logo {
+            display: flex;
+            align-items: center;
+            gap: 12px;
+        }
+        
+        .logo i {
+            font-size: 2rem;
+        }
+        
+        h1 {
+            font-weight: 700;
+            font-size: 1.8rem;
+            margin: 0;
+        }
+        
+        .tagline {
+            font-weight: 300;
+            opacity: 0.9;
+            margin-top: 4px;
+        }
+        
+        .main-content {
+            display: grid;
+            grid-template-columns: repeat(auto-fit, minmax(350px, 1fr));
+            gap: 30px;
+            margin: 40px 0;
+            flex: 1 0 auto;
+        }
+        
+        .card {
+            background: white;
+            border-radius: 12px;
+            box-shadow: var(--card-shadow);
+            padding: 30px;
+            transition: var(--transition);
+            height: 100%;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        .card:hover {
+            transform: translateY(-5px);
+        }
+        
+        .card-header {
+            display: flex;
+            align-items: center;
+            margin-bottom: 20px;
+            padding-bottom: 15px;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .card-icon {
+            width: 40px;
+            height: 40px;
+            border-radius: 50%;
+            background: linear-gradient(135deg, var(--primary-light) 0%, var(--primary) 100%);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            color: white;
+            margin-right: 15px;
+            flex-shrink: 0;
+        }
+        
+        .card-title {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--dark);
+            margin: 0;
+        }
+        
+        .form-group {
+            margin-bottom: 25px;
+        }
+        
+        label {
+            display: block;
+            margin-bottom: 8px;
+            font-weight: 500;
+            color: var(--dark);
+        }
+        
+        .input-group {
+            position: relative;
+            display: flex;
+            gap: 10px;
+        }
+        
+        input[type="number"], input[type="text"] {
+            width: 100%;
+            padding: 12px 15px;
+            border: 1px solid #cbd5e1;
+            border-radius: 8px;
+            font-size: 16px;
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+        }
+        
+        input[type="number"]:focus, input[type="text"]:focus {
+            border-color: var(--primary);
+            box-shadow: 0 0 0 3px rgba(67, 97, 238, 0.2);
+            outline: none;
+        }
+        
+        button {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            border: none;
+            padding: 12px 20px;
+            border-radius: 8px;
+            cursor: pointer;
+            font-size: 16px;
+            font-weight: 500;
+            font-family: 'Poppins', sans-serif;
+            transition: var(--transition);
+            display: flex;
+            align-items: center;
+            justify-content: center;
+            gap: 8px;
+        }
+        
+        button:hover {
+            transform: translateY(-2px);
+            box-shadow: 0 4px 12px rgba(67, 97, 238, 0.3);
+        }
+        
+        button:active {
+            transform: translateY(0);
+        }
+        
+        .btn-danger {
+            background: linear-gradient(135deg, var(--danger) 0%, #e11d48 100%);
+        }
+        
+        .btn-danger:hover {
+            box-shadow: 0 4px 12px rgba(244, 63, 94, 0.3);
+        }
+        
+        .btn-success {
+            background: linear-gradient(135deg, var(--success) 0%, #16a34a 100%);
+        }
+        
+        .btn-success:hover {
+            box-shadow: 0 4px 12px rgba(74, 222, 128, 0.3);
+        }
+        
+        .pack-sizes {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(150px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .pack-size {
+            background-color: #f8fafc;
+            padding: 15px;
+            border-radius: 8px;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            gap: 10px;
+            border: 1px solid #e2e8f0;
+            transition: var(--transition);
+        }
+        
+        .pack-size:hover {
+            border-color: var(--primary-light);
+            transform: translateY(-2px);
+        }
+        
+        .pack-size-value {
+            font-size: 1.5rem;
+            font-weight: 600;
+            color: var(--primary-dark);
+        }
+        
+        .pack-size-label {
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .pack-size button {
+            padding: 8px 12px;
+            font-size: 14px;
+            width: 100%;
+        }
+        
+        .result {
+            margin-top: 30px;
+            padding: 20px;
+            background-color: #f8fafc;
+            border-radius: 8px;
+            border-left: 4px solid var(--primary);
+            animation: fadeIn 0.5s ease;
+        }
+        
+        @keyframes fadeIn {
+            from { opacity: 0; transform: translateY(10px); }
+            to { opacity: 1; transform: translateY(0); }
+        }
+        
+        .result h3 {
+            margin-bottom: 15px;
+            color: var(--dark);
+            font-weight: 600;
+            font-size: 1.2rem;
+            display: flex;
+            align-items: center;
+            gap: 8px;
+        }
+        
+        .result-details {
+            margin-top: 15px;
+        }
+        
+        .result-item {
+            display: flex;
+            justify-content: space-between;
+            padding: 12px 0;
+            border-bottom: 1px solid #e2e8f0;
+        }
+        
+        .result-item:last-child {
+            border-bottom: none;
+        }
+        
+        .result-packs {
+            display: grid;
+            grid-template-columns: repeat(auto-fill, minmax(200px, 1fr));
+            gap: 15px;
+            margin-top: 20px;
+        }
+        
+        .pack-card {
+            background: white;
+            border-radius: 8px;
+            padding: 15px;
+            border: 1px solid #e2e8f0;
+            display: flex;
+            flex-direction: column;
+            align-items: center;
+            text-align: center;
+            transition: var(--transition);
+        }
+        
+        .pack-card:hover {
+            border-color: var(--primary);
+            transform: translateY(-2px);
+        }
+        
+        .pack-quantity {
+            font-size: 2rem;
+            font-weight: 700;
+            color: var(--primary-dark);
+        }
+        
+        .pack-size-text {
+            font-weight: 500;
+        }
+        
+        .pack-total {
+            margin-top: 5px;
+            font-size: 0.9rem;
+            color: var(--gray);
+        }
+        
+        .error {
+            color: var(--danger);
+            margin-top: 15px;
+            padding: 15px;
+            background-color: #fee2e2;
+            border-radius: 8px;
+            border-left: 4px solid var(--danger);
+            display: flex;
+            align-items: center;
+            gap: 10px;
+            animation: shake 0.5s ease;
+        }
+        
+        @keyframes shake {
+            0%, 100% { transform: translateX(0); }
+            20%, 60% { transform: translateX(-5px); }
+            40%, 80% { transform: translateX(5px); }
+        }
+        
+        .loading {
+            display: inline-block;
+            width: 20px;
+            height: 20px;
+            border: 3px solid rgba(255,255,255,.3);
+            border-radius: 50%;
+            border-top-color: #fff;
+            animation: spin 1s ease-in-out infinite;
+        }
+        
+        @keyframes spin {
+            to { transform: rotate(360deg); }
+        }
+        
+        .summary-card {
+            background: linear-gradient(135deg, var(--primary) 0%, var(--primary-dark) 100%);
+            color: white;
+            padding: 20px;
+            border-radius: 8px;
+            margin-top: 20px;
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .summary-title {
+            font-weight: 500;
+            font-size: 1rem;
+        }
+        
+        .summary-value {
+            font-weight: 700;
+            font-size: 1.5rem;
+        }
+        
+        .empty-state {
+            text-align: center;
+            padding: 30px;
+            color: var(--gray);
+        }
+        
+        .empty-state i {
+            font-size: 3rem;
+            margin-bottom: 15px;
+            opacity: 0.5;
+        }
+        
+        .empty-state p {
+            font-size: 1.1rem;
+            margin-bottom: 20px;
+        }
+        
+        .hidden {
+            display: none;
+        }
+        
+        .page-content {
+            flex: 1 0 auto;
+            display: flex;
+            flex-direction: column;
+        }
+        
+        footer {
+            background-color: var(--dark);
+            color: white;
+            padding: 20px 0;
+            flex-shrink: 0;
+            margin-top: auto;
+        }
+        
+        .footer-content {
+            display: flex;
+            justify-content: space-between;
+            align-items: center;
+        }
+        
+        .footer-links {
+            display: flex;
+            gap: 20px;
+        }
+        
+        .footer-links a {
+            color: white;
+            text-decoration: none;
+            opacity: 0.8;
+            transition: var(--transition);
+        }
+        
+        .footer-links a:hover {
+            opacity: 1;
+        }
+        
+        @media (max-width: 768px) {
+            .main-content {
+                grid-template-columns: 1fr;
+            }
+            
+            .header-content {
+                flex-direction: column;
+                text-align: center;
+            }
+            
+            .footer-content {
+                flex-direction: column;
+                gap: 15px;
+                text-align: center;
+            }
+            
+            .pack-sizes {
+                grid-template-columns: repeat(auto-fill, minmax(120px, 1fr));
+            }
+            
+            .result-packs {
+                grid-template-columns: 1fr;
+            }
+        }
+    </style>
+</head>
+<body>
+    <header>
+        <div class="container">
+            <div class="header-content">
+                <div class="logo">
+                    <i class="fas fa-box"></i>
+                    <div>
+                        <h1>Pack Optimizer Pro</h1>
+                        <p class="tagline">Optimize your packaging, minimize waste</p>
+                    </div>
+                </div>
+            </div>
+        </div>
+    </header>
+    
+    <div class="page-content">
+        <div class="container">
+            <div class="main-content">
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-boxes-stacked"></i>
+                        </div>
+                        <h2 class="card-title">Pack Sizes</h2>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="new-pack-size">Add New Pack Size</label>
+                        <div class="input-group">
+                            <input type="number" id="new-pack-size" placeholder="Enter pack size (e.g. 250)" min="1">
+                            <button id="add-pack-size" class="btn-success">
+                                <i class="fas fa-plus"></i> Add
+                            </button>
+                        </div>
+                    </div>
+                    
+                    <div id="pack-sizes-container" class="pack-sizes">
+                        <!-- Pack sizes will be added here dynamically -->
+                        <div class="loading"></div>
+                    </div>
+                    
+                    <div id="pack-sizes-error" class="error hidden"></div>
+                </div>
+                
+                <div class="card">
+                    <div class="card-header">
+                        <div class="card-icon">
+                            <i class="fas fa-calculator"></i>
+                        </div>
+                        <h2 class="card-title">Calculate Order</h2>
+                    </div>
+                    
+                    <div class="form-group">
+                        <label for="items-ordered">Number of Items Ordered</label>
+                        <input type="number" id="items-ordered" placeholder="Enter number of items" min="1">
+                    </div>
+                    
+                    <button id="calculate-btn">
+                        <i class="fas fa-calculator"></i> Calculate Packs
+                    </button>
+                    
+                    <div id="calculation-result" class="result hidden">
+                        <h3><i class="fas fa-check-circle"></i> Calculation Result</h3>
+                        
+                        <div class="summary-card">
+                            <div>
+                                <div class="summary-title">Items Ordered</div>
+                                <div class="summary-value" id="result-items-ordered">0</div>
+                            </div>
+                            <div>
+                                <div class="summary-title">Total Items</div>
+                                <div class="summary-value" id="result-total-items">0</div>
+                            </div>
+                            <div>
+                                <div class="summary-title">Total Packs</div>
+                                <div class="summary-value" id="result-total-packs">0</div>
+                            </div>
+                        </div>
+                        
+                        <h3 style="margin-top: 25px;"><i class="fas fa-box-open"></i> Pack Breakdown</h3>
+                        <div id="result-packs" class="result-packs">
+                            <!-- Pack breakdown will be added here dynamically -->
+                        </div>
+                    </div>
+                    
+                    <div id="calculation-error" class="error hidden"></div>
+                </div>
+            </div>
+        </div>
+    </div>
+    
+    <footer>
+        <div class="container">
+            <div class="footer-content">
+                <p>&copy; 2025 Pack Optimizer Pro. All rights reserved.</p>
+                <div class="footer-links">
+                    <a href="/swagger/index.html">API Documentation</a>
+                    <a href="/health">Health Check</a>
+                </div>
+            </div>
+        </div>
+    </footer>
+    
+    <script>
+        // API endpoints
+        const API_BASE = '/api';
+        const PACK_SIZES_ENDPOINT = `${API_BASE}/pack-sizes`;
+        const CALCULATE_PACKS_ENDPOINT = `${API_BASE}/calculate-packs`;
+        
+        // DOM Elements
+        const packSizesContainer = document.getElementById('pack-sizes-container');
+        const newPackSizeInput = document.getElementById('new-pack-size');
+        const addPackSizeBtn = document.getElementById('add-pack-size');
+        const packSizesError = document.getElementById('pack-sizes-error');
+        
+        const itemsOrderedInput = document.getElementById('items-ordered');
+        const calculateBtn = document.getElementById('calculate-btn');
+        const calculationResult = document.getElementById('calculation-result');
+        const calculationError = document.getElementById('calculation-error');
+        
+        const resultItemsOrdered = document.getElementById('result-items-ordered');
+        const resultTotalItems = document.getElementById('result-total-items');
+        const resultTotalPacks = document.getElementById('result-total-packs');
+        const resultPacks = document.getElementById('result-packs');
+        
+        // Fetch data from REST API
+        async function fetchAPI(endpoint, method = 'GET', data = null) {
+            try {
+                const options = {
+                    method,
+                    headers: {
+                        'Content-Type': 'application/json',
+                    }
+                };
+                
+                if (data) {
+                    options.body = JSON.stringify(data);
+                }
+                
+                const response = await fetch(endpoint, options);
+                
+                if (!response.ok) {
+                    // Try to parse error as JSON, but handle cases where it's not JSON
+                    try {
+                        const errorData = await response.json();
+                        throw new Error(errorData.error || `HTTP error! status: ${response.status}`);
+                    } catch (jsonError) {
+                        throw new Error(`HTTP error! status: ${response.status}`);
+                    }
+                }
+                
+                // For 204 No Content responses, return null instead of trying to parse JSON
+                if (response.status === 204) {
+                    return null;
+                }
+                
+                return await response.json();
+            } catch (error) {
+                console.error('API Error:', error);
+                throw error;
+            }
+        }
+        
+        // Load pack sizes
+        async function loadPackSizes() {
+            try {
+                packSizesContainer.innerHTML = '<div class="loading"></div>';
+                packSizesError.classList.add('hidden');
+                
+                const data = await fetchAPI(PACK_SIZES_ENDPOINT);
+                const packSizes = data.items;
+                
+                renderPackSizes(packSizes);
+            } catch (error) {
+                packSizesContainer.innerHTML = '';
+                packSizesError.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error loading pack sizes: ${error.message}`;
+                packSizesError.classList.remove('hidden');
+            }
+        }
+        
+        // Render pack sizes
+        function renderPackSizes(packSizes) {
+            packSizesContainer.innerHTML = '';
+            
+            if (packSizes.length === 0) {
+                packSizesContainer.innerHTML = `
+                    <div class="empty-state">
+                        <i class="fas fa-box-open"></i>
+                        <p>No pack sizes defined yet</p>
+                        <p>Add some pack sizes to get started</p>
+                    </div>
+                `;
+                return;
+            }
+            
+            // Sort pack sizes numerically
+            packSizes.sort((a, b) => a.size - b.size);
+            
+            packSizes.forEach(packSize => {
+                const packSizeElement = document.createElement('div');
+                packSizeElement.className = 'pack-size';
+                packSizeElement.innerHTML = `
+                    <div class="pack-size-value">${packSize.size}</div>
+                    <div class="pack-size-label">items</div>
+                    <button class="btn-danger delete-pack-size" data-id="${packSize.id}">
+                        <i class="fas fa-trash"></i> Remove
+                    </button>
+                `;
+                packSizesContainer.appendChild(packSizeElement);
+            });
+            
+            // Add event listeners to delete buttons
+            document.querySelectorAll('.delete-pack-size').forEach(button => {
+                button.addEventListener('click', async () => {
+                    const id = button.getAttribute('data-id');
+                    await deletePackSize(id);
+                });
+            });
+        }
+        
+        // Add new pack size
+        async function addPackSize() {
+            const size = parseInt(newPackSizeInput.value);
+            
+            if (!size || size <= 0) {
+                packSizesError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter a valid pack size (greater than 0)';
+                packSizesError.classList.remove('hidden');
+                return;
+            }
+            
+            try {
+                addPackSizeBtn.innerHTML = '<span class="loading"></span> Adding...';
+                addPackSizeBtn.disabled = true;
+                packSizesError.classList.add('hidden');
+                
+                await fetchAPI(PACK_SIZES_ENDPOINT, 'POST', { size });
+                
+                newPackSizeInput.value = '';
+                await loadPackSizes();
+            } catch (error) {
+                packSizesError.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error adding pack size: ${error.message}`;
+                packSizesError.classList.remove('hidden');
+            } finally {
+                addPackSizeBtn.innerHTML = '<i class="fas fa-plus"></i> Add';
+                addPackSizeBtn.disabled = false;
+            }
+        }
+        
+        // Delete pack size
+        async function deletePackSize(id) {
+            try {
+                // Find the pack size element to remove
+                const packSizeElement = document.querySelector(`.delete-pack-size[data-id="${id}"]`).closest('.pack-size');
+                
+                // Show loading state
+                if (packSizeElement) {
+                    packSizeElement.style.opacity = '0.5';
+                    const deleteButton = packSizeElement.querySelector('.delete-pack-size');
+                    if (deleteButton) {
+                        deleteButton.innerHTML = '<span class="loading"></span>';
+                        deleteButton.disabled = true;
+                    }
+                }
+                
+                packSizesError.classList.add('hidden');
+                
+                // Send delete request
+                await fetchAPI(`${PACK_SIZES_ENDPOINT}/${id}`, 'DELETE');
+                
+                // Remove the element from the DOM immediately
+                if (packSizeElement) {
+                    packSizeElement.remove();
+                    
+                    // If no pack sizes left, show empty state
+                    if (document.querySelectorAll('.pack-size').length === 0) {
+                        packSizesContainer.innerHTML = `
+                            <div class="empty-state">
+                                <i class="fas fa-box-open"></i>
+                                <p>No pack sizes defined yet</p>
+                                <p>Add some pack sizes to get started</p>
+                            </div>
+                        `;
+                    }
+                } else {
+                    // Fallback to reloading all pack sizes if element not found
+                    await loadPackSizes();
+                }
+            } catch (error) {
+                packSizesError.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error deleting pack size: ${error.message}`;
+                packSizesError.classList.remove('hidden');
+                // Reload pack sizes to restore the UI
+                await loadPackSizes();
+            }
+        }
+        
+        // Calculate packs
+        async function calculatePacks() {
+            const itemsOrdered = parseInt(itemsOrderedInput.value);
+            
+            if (!itemsOrdered || itemsOrdered <= 0) {
+                calculationError.innerHTML = '<i class="fas fa-exclamation-circle"></i> Please enter a valid number of items (greater than 0)';
+                calculationError.classList.remove('hidden');
+                calculationResult.classList.add('hidden');
+                return;
+            }
+            
+            try {
+                calculateBtn.innerHTML = '<span class="loading"></span> Calculating...';
+                calculateBtn.disabled = true;
+                calculationError.classList.add('hidden');
+                calculationResult.classList.add('hidden');
+                
+                const result = await fetchAPI(CALCULATE_PACKS_ENDPOINT, 'POST', { itemsOrdered });
+                
+                // Display result
+                resultItemsOrdered.textContent = result.itemsOrdered.toLocaleString();
+                resultTotalItems.textContent = result.totalItems.toLocaleString();
+                
+                // Calculate total packs
+                let totalPacks = 0;
+                for (const size in result.packs) {
+                    if (result.packs.hasOwnProperty(size)) {
+                        totalPacks += result.packs[size];
+                    }
+                }
+                
+                resultTotalPacks.textContent = totalPacks.toLocaleString();
+                
+                // Render pack breakdown
+                resultPacks.innerHTML = '';
+                
+                // Convert packs object to array and sort by pack size in descending order
+                const packsArray = [];
+                for (const size in result.packs) {
+                    if (result.packs.hasOwnProperty(size)) {
+                        packsArray.push({
+                            packSize: parseInt(size),
+                            quantity: result.packs[size]
+                        });
+                    }
+                }
+                
+                packsArray.sort((a, b) => b.packSize - a.packSize);
+                
+                packsArray.forEach(pack => {
+                    const packElement = document.createElement('div');
+                    packElement.className = 'pack-card';
+                    packElement.innerHTML = `
+                        <div class="pack-quantity">${pack.quantity}</div>
+                        <div class="pack-size-text">${pack.packSize}-item pack${pack.quantity > 1 ? 's' : ''}</div>
+                        <div class="pack-total">${(pack.quantity * pack.packSize).toLocaleString()} total items</div>
+                    `;
+                    resultPacks.appendChild(packElement);
+                });
+                
+                calculationResult.classList.remove('hidden');
+                
+                // Scroll to result
+                calculationResult.scrollIntoView({ behavior: 'smooth', block: 'nearest' });
+            } catch (error) {
+                calculationError.innerHTML = `<i class="fas fa-exclamation-circle"></i> Error calculating packs: ${error.message}`;
+                calculationError.classList.remove('hidden');
+                calculationResult.classList.add('hidden');
+            } finally {
+                calculateBtn.innerHTML = '<i class="fas fa-calculator"></i> Calculate Packs';
+                calculateBtn.disabled = false;
+            }
+        }
+        
+        // Event listeners
+        addPackSizeBtn.addEventListener('click', addPackSize);
+        calculateBtn.addEventListener('click', calculatePacks);
+        
+        // Enter key support
+        newPackSizeInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                addPackSize();
+            }
+        });
+        
+        itemsOrderedInput.addEventListener('keypress', (e) => {
+            if (e.key === 'Enter') {
+                calculatePacks();
+            }
+        });
+        
+        // Initialize
+        document.addEventListener('DOMContentLoaded', () => {
+            loadPackSizes();
+        });
+    </script>
+</body>
+</html>
+

@@ -1,0 +1,247 @@
+basePath: /api
+definitions:
+  rest.CalculationRequest:
+    properties:
+      itemsOrdered:
+        type: integer
+    required:
+    - itemsOrdered
+    type: object
+  rest.CalculationResponse:
+    properties:
+      itemsOrdered:
+        type: integer
+      packs:
+        additionalProperties:
+          type: integer
+        type: object
+      totalItems:
+        type: integer
+    type: object
+  rest.CreatePackSizeRequest:
+    properties:
+      size:
+        type: integer
+    required:
+    - size
+    type: object
+  rest.ErrorResponse:
+    properties:
+      error:
+        type: string
+    type: object
+  rest.PackSizeResponse:
+    properties:
+      createdAt:
+        type: string
+      id:
+        type: string
+      size:
+        type: integer
+      updatedAt:
+        type: string
+    type: object
+  rest.PackSizesResponse:
+    properties:
+      items:
+        items:
+          $ref: '#/definitions/rest.PackSizeResponse'
+        type: array
+    type: object
+  rest.UpdatePackSizeRequest:
+    properties:
+      size:
+        type: integer
+    required:
+    - size
+    type: object
+host: localhost:8080
+info:
+  contact:
+    email: support@example.com
+    name: API Support
+    url: http://www.example.com/support
+  description: API for calculating optimal packs for orders
+  license:
+    name: MIT
+    url: https://opensource.org/licenses/MIT
+  termsOfService: http://swagger.io/terms/
+  title: Pack Calculator API
+  version: "1.0"
+paths:
+  /calculate-packs:
+    post:
+      consumes:
+      - application/json
+      description: Calculate the optimal pack combination for an order
+      parameters:
+      - description: Calculation Request
+        in: body
+        name: calculation
+        required: true
+        schema:
+          $ref: '#/definitions/rest.CalculationRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.CalculationResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.ErrorResponse'
+      summary: Calculate packs for an order
+      tags:
+      - calculation
+  /pack-sizes:
+    get:
+      description: Get all pack sizes
+      parameters:
+      - description: 'Page number (default: 1)'
+        in: query
+        name: page
+        type: integer
+      - description: 'Items per page (default: 10)'
+        in: query
+        name: limit
+        type: integer
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.PackSizesResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.ErrorResponse'
+      summary: Get all pack sizes
+      tags:
+      - pack-sizes
+    post:
+      consumes:
+      - application/json
+      description: Create a new pack size
+      parameters:
+      - description: Pack Size
+        in: body
+        name: packSize
+        required: true
+        schema:
+          $ref: '#/definitions/rest.CreatePackSizeRequest'
+      produces:
+      - application/json
+      responses:
+        "201":
+          description: Created
+          schema:
+            $ref: '#/definitions/rest.PackSizeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.ErrorResponse'
+      summary: Create a new pack size
+      tags:
+      - pack-sizes
+  /pack-sizes/{id}:
+    delete:
+      description: Delete a pack size
+      parameters:
+      - description: Pack Size ID
+        in: path
+        name: id
+        required: true
+        type: string
+      responses:
+        "204":
+          description: No Content
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/rest.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.ErrorResponse'
+      summary: Delete a pack size
+      tags:
+      - pack-sizes
+    get:
+      description: Get a pack size by ID
+      parameters:
+      - description: Pack Size ID
+        in: path
+        name: id
+        required: true
+        type: string
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.PackSizeResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/rest.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.ErrorResponse'
+      summary: Get a pack size by ID
+      tags:
+      - pack-sizes
+    put:
+      consumes:
+      - application/json
+      description: Update a pack size
+      parameters:
+      - description: Pack Size ID
+        in: path
+        name: id
+        required: true
+        type: string
+      - description: Pack Size
+        in: body
+        name: packSize
+        required: true
+        schema:
+          $ref: '#/definitions/rest.UpdatePackSizeRequest'
+      produces:
+      - application/json
+      responses:
+        "200":
+          description: OK
+          schema:
+            $ref: '#/definitions/rest.PackSizeResponse'
+        "400":
+          description: Bad Request
+          schema:
+            $ref: '#/definitions/rest.ErrorResponse'
+        "404":
+          description: Not Found
+          schema:
+            $ref: '#/definitions/rest.ErrorResponse'
+        "500":
+          description: Internal Server Error
+          schema:
+            $ref: '#/definitions/rest.ErrorResponse'
+      summary: Update a pack size
+      tags:
+      - pack-sizes
+securityDefinitions:
+  BasicAuth:
+    type: basic
+swagger: "2.0"

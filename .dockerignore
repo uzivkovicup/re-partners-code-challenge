@@ -1,0 +1,58 @@
+# Git
+.git
+.gitignore
+.github
+
+# Docker
+.docker
+docker-compose*.yml
+
+# IDE files
+.idea
+.vscode
+*.swp
+*.swo
+*.sublime*
+*~
+
+# Build artifacts
+/build/
+/bin/
+*.exe
+*.exe~
+*.dll
+*.so
+*.dylib
+*.out
+
+# Dependency directories
+/vendor/
+/node_modules/
+
+# Logs
+/logs/
+*.log
+
+# Environment files (except .env.sample)
+.env
+.env.local
+.env.development
+.env.test
+.env.production
+
+# Temporary files
+/tmp/
+*.tmp
+.DS_Store
+
+# Database files
+*.db
+*.sqlite
+
+# Specific to this project
+/test-config.go
+
+# Don't ignore these files
+!.env.sample
+!docs/
+!static/ 

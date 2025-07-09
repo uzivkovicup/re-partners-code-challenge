@@ -1,0 +1,43 @@
+services:
+  - type: web
+    name: go-pack-calculator
+    env: docker
+    dockerfilePath: ./Dockerfile.prod
+    plan: free
+    healthCheckPath: /health
+    envVars:
+      - key: ENVIRONMENT
+        value: production
+      - key: PROTOCOL
+        value: https
+      - key: HOST
+        value: 0.0.0.0
+      - key: PORT
+        value: 8080
+      - key: POSTGRES_DB_HOST
+        fromDatabase:
+          name: go-pack-calculator-db
+          property: host
+      - key: POSTGRES_DB_PORT
+        fromDatabase:
+          name: go-pack-calculator-db
+          property: port
+      - key: POSTGRES_DB_USER
+        fromDatabase:
+          name: go-pack-calculator-db
+          property: user
+      - key: POSTGRES_DB_PASSWORD
+        fromDatabase:
+          name: go-pack-calculator-db
+          property: password
+      - key: POSTGRES_DB_NAME
+        fromDatabase:
+          name: go-pack-calculator-db
+          property: database
+      - key: POSTGRES_DB_SSLMODE
+        value: require
+
+databases:
+  - name: go-pack-calculator-db
+    plan: free
+    ipAllowList: [] # optional (allows all IPs by default)
