@@ -54,7 +54,7 @@ describe('Pack Calculator UI', () => {
     // Mock the response
     const mockResponse = {
       data: {
-        packSizes: {
+        pack_sizes: {
           items: [
             { id: '1', size: 250 },
             { id: '2', size: 500 },
@@ -87,7 +87,7 @@ describe('Pack Calculator UI', () => {
     // Mock the response
     const mockResponse = {
       data: {
-        createPackSize: {
+        create_pack_size: {
           id: '6',
           size: 300
         }
@@ -116,13 +116,13 @@ describe('Pack Calculator UI', () => {
     // Mock the response
     const mockResponse = {
       data: {
-        calculatePacks: {
-          itemsOrdered: 501,
-          totalItems: 750,
-          totalPacks: 2,
+        calculate_packs: {
+          items_ordered: 501,
+          total_items: 750,
+          total_packs: 2,
           packs: [
-            { packSize: 500, quantity: 1 },
-            { packSize: 250, quantity: 1 }
+            { pack_size: 500, quantity: 1 },
+            { pack_size: 250, quantity: 1 }
           ]
         }
       }

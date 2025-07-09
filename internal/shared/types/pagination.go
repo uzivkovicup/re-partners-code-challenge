@@ -6,13 +6,13 @@ type Pagination struct {
 	Limit      int64         `json:"limit"`
 	Offset     int64         `json:"offset"`
 	Total      int64         `json:"total"`
-	IsLastPage bool          `json:"isLastPage"`
+	IsLastPage bool          `json:"is_last_page"`
 	Data       []interface{} `json:"data"`
 	Items      []interface{} `json:"items"`
 }
 
 // NewPagination creates a new pagination instance
-func NewPagination(page int64, limit int64, total int64, isLastPage bool, data []interface{}) *Pagination {
+func NewPagination(page, limit, total int64, isLastPage bool, data []interface{}) *Pagination {
 	return &Pagination{
 		Page:       page,
 		Limit:      limit,

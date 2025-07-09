@@ -2,8 +2,8 @@ package entities
 
 // CalculationResult represents the result of a pack calculation
 type CalculationResult struct {
-	ItemsOrdered int         `json:"itemsOrdered"`
-	TotalItems   int         `json:"totalItems"`
+	ItemsOrdered int         `json:"items_ordered"`
+	TotalItems   int         `json:"total_items"`
 	Packs        map[int]int `json:"packs"` // Map of pack size to quantity
 }
 

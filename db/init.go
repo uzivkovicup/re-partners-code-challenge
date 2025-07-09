@@ -5,7 +5,7 @@ import (
 	"fmt"
 	"log"
 
-	_ "github.com/lib/pq"
+	_ "github.com/lib/pq" // apply to run init fuctions
 )
 
 // EnsureDatabaseExists ensures that the database exists
@@ -35,5 +35,6 @@ func EnsureDatabaseExists(host string, port int, user, password, dbName, sslMode
 		}
 		log.Printf("Database '%s' created.\n", dbName)
 	}
+
 	return nil
 }

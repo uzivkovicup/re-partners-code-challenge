@@ -7,6 +7,7 @@ import (
 	"github.com/google/uuid"
 	"gorm.io/gorm"
 
+	stderr "errors"
 	"go-pack-calculator/internal/domain/entities"
 	"go-pack-calculator/internal/domain/errors"
 	"go-pack-calculator/internal/ports/secondary"
@@ -73,7 +74,7 @@ func (r *PackSizeRepository) Create(packSize *entities.PackSize) (*entities.Pack
 
 	// Insert into database
 	if err := r.db.Create(model).Error; err != nil {
-		return nil, fmt.Errorf("%w: %v", errors.ErrDatabaseOperation, err)
+		return nil, fmt.Errorf("%w: %s", errors.ErrDatabaseOperation, err.Error())
 	}
 
 	// Return the created entity
@@ -86,7 +87,7 @@ func (r *PackSizeRepository) FindAll() ([]*entities.PackSize, error) {
 
 	// Query the database
 	if err := r.db.Order("size ASC").Find(&models).Error; err != nil {
-		return nil, fmt.Errorf("%w: %v", errors.ErrDatabaseOperation, err)
+		return nil, fmt.Errorf("%w: %s", errors.ErrDatabaseOperation, err.Error())
 	}
 
 	// Convert to entities
@@ -105,7 +106,7 @@ func (r *PackSizeRepository) FindAllPaginated(page, limit int64) ([]*entities.Pa
 
 	// Get total count
 	if err := r.db.Model(&PackSizeModel{}).Count(&total).Error; err != nil {
-		return nil, 0, fmt.Errorf("%w: %v", errors.ErrDatabaseOperation, err)
+		return nil, 0, fmt.Errorf("%w: %s", errors.ErrDatabaseOperation, err.Error())
 	}
 
 	// Calculate offset
@@ -113,7 +114,7 @@ func (r *PackSizeRepository) FindAllPaginated(page, limit int64) ([]*entities.Pa
 
 	// Query with pagination
 	if err := r.db.Order("size ASC").Offset(int(offset)).Limit(int(limit)).Find(&models).Error; err != nil {
-		return nil, 0, fmt.Errorf("%w: %v", errors.ErrDatabaseOperation, err)
+		return nil, 0, fmt.Errorf("%w: %s", errors.ErrDatabaseOperation, err.Error())
 	}
 
 	// Convert to entities
@@ -132,10 +133,11 @@ func (r *PackSizeRepository) FindByID(id string) (*entities.PackSize, error) {
 	// Query the database
 	result := r.db.First(&model, "id = ?", id)
 	if result.Error != nil {
-		if result.Error == gorm.ErrRecordNotFound {
+		if stderr.Is(result.Error, gorm.ErrRecordNotFound) {
 			return nil, errors.ErrPackSizeNotFound
 		}
-		return nil, fmt.Errorf("%w: %v", errors.ErrDatabaseOperation, result.Error)
+
+		return nil, fmt.Errorf("%w: %s", errors.ErrDatabaseOperation, result.Error.Error())
 	}
 
 	// Convert to entity
@@ -153,7 +155,7 @@ func (r *PackSizeRepository) Update(packSize *entities.PackSize) (*entities.Pack
 	// Update in database
 	result := r.db.Model(&PackSizeModel{ID: packSize.ID}).Updates(model)
 	if result.Error != nil {
-		return nil, fmt.Errorf("%w: %v", errors.ErrDatabaseOperation, result.Error)
+		return nil, fmt.Errorf("%w: %s", errors.ErrDatabaseOperation, result.Error.Error())
 	}
 
 	if result.RowsAffected == 0 {
@@ -169,7 +171,7 @@ func (r *PackSizeRepository) Delete(id string) error {
 	// Delete from database
 	result := r.db.Delete(&PackSizeModel{}, "id = ?", id)
 	if result.Error != nil {
-		return fmt.Errorf("%w: %v", errors.ErrDatabaseOperation, result.Error)
+		return fmt.Errorf("%w: %s", errors.ErrDatabaseOperation, result.Error.Error())
 	}
 
 	if result.RowsAffected == 0 {

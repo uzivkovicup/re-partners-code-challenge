@@ -29,11 +29,6 @@ test-coverage:
 	@echo "Coverage report generated at ./coverage.html"
 
 generate-swagger-docs:
-	@echo "Checking if swag is installed..."
-	@if ! command -v swag &> /dev/null; then \
-		echo "Installing swag..."; \
-		go install github.com/swaggo/swag/cmd/swag@latest; \
-	fi
 	@echo "Generating Swagger documentation..."
 	swag init -g cmd/http/main.go -o docs
 	@echo "Swagger documentation generated successfully"
@@ -46,3 +41,12 @@ build-prod-image:
 clean: local-down
 	docker volume rm -f $(shell docker volume ls -q | grep go-task-assessment)
 	@echo "Docker volumes cleaned successfully"
+
+init:
+	@echo installing swag
+	go install github.com/swaggo/swag/cmd/swag@v1.8.12
+	@echo installing golangcilint
+	go install github.com/golangci/golangci-lint/cmd/golangci-lint@v1.64.6
+
+lint:
+	golangci-lint run

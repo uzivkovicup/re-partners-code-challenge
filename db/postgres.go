@@ -2,6 +2,7 @@ package db
 
 import (
 	"fmt"
+	"go-pack-calculator/constants"
 	"log"
 	"time"
 
@@ -14,7 +15,7 @@ import (
 var PostgresDB *gorm.DB
 
 // postgresDB struct
-type postgresDB struct {
+type PostgresDBConfig struct {
 	Host     string
 	Port     int
 	User     string
@@ -24,8 +25,8 @@ type postgresDB struct {
 }
 
 // NewPostgresDB now only initializes the config struct
-func NewPostgresDB(host string, port int, user string, password string, database string, sslMode string) *postgresDB {
-	return &postgresDB{
+func NewPostgresDB(host string, port int, user, password, database, sslMode string) *PostgresDBConfig {
+	return &PostgresDBConfig{
 		Host:     host,
 		Port:     port,
 		User:     user,
@@ -36,7 +37,7 @@ func NewPostgresDB(host string, port int, user string, password string, database
 }
 
 // Connect to PostgresDB
-func (p *postgresDB) Connect() error {
+func (p *PostgresDBConfig) Connect() error {
 	if PostgresDB != nil {
 		return nil
 	}
@@ -60,7 +61,7 @@ func (p *postgresDB) Connect() error {
 	gormLogger := logger.New(
 		log.New(log.Writer(), "\r\n", log.LstdFlags),
 		logger.Config{
-			SlowThreshold:             200 * time.Millisecond,
+			SlowThreshold:             constants.GormLoggerSlowThreshold,
 			LogLevel:                  logger.Info,
 			IgnoreRecordNotFoundError: true,
 			Colorful:                  true,
@@ -101,11 +102,12 @@ func (p *postgresDB) Connect() error {
 	}
 
 	PostgresDB = db
+
 	return nil
 }
 
 // Close PostgresDB
-func (p *postgresDB) Close() error {
+func (p *PostgresDBConfig) Close() error {
 	if PostgresDB == nil {
 		return nil
 	}

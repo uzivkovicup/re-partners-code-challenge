@@ -18,7 +18,7 @@ type UpdatePackSizeRequest struct {
 
 // CalculationRequest represents a request to calculate packs
 type CalculationRequest struct {
-	ItemsOrdered int `json:"itemsOrdered" binding:"required,gt=0"`
+	ItemsOrdered int `json:"items_ordered" binding:"required,gt=0"`
 }
 
 // Response models
@@ -27,8 +27,8 @@ type CalculationRequest struct {
 type PackSizeResponse struct {
 	ID        string    `json:"id"`
 	Size      int       `json:"size"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 // PackSizesResponse represents a list of pack sizes
@@ -41,14 +41,14 @@ type PaginatedPackSizesResponse struct {
 	Page       int64              `json:"page"`
 	Limit      int64              `json:"limit"`
 	Total      int64              `json:"total"`
-	IsLastPage bool               `json:"isLastPage"`
+	IsLastPage bool               `json:"is_last_page"`
 	Items      []PackSizeResponse `json:"items"`
 }
 
 // CalculationResponse represents a calculation result
 type CalculationResponse struct {
-	ItemsOrdered int         `json:"itemsOrdered"`
-	TotalItems   int         `json:"totalItems"`
+	ItemsOrdered int         `json:"items_ordered"`
+	TotalItems   int         `json:"total_items"`
 	Packs        map[int]int `json:"packs"`
 }
 

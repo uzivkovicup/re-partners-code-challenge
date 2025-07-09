@@ -8,13 +8,13 @@ import (
 	"os"
 	"os/signal"
 	"syscall"
-	"time"
 
 	"github.com/gin-gonic/gin"
 	swaggerFiles "github.com/swaggo/files"
 	ginSwagger "github.com/swaggo/gin-swagger"
 
 	"go-pack-calculator/config"
+	"go-pack-calculator/constants"
 	"go-pack-calculator/db"
 	_ "go-pack-calculator/docs" // Import swagger docs
 	"go-pack-calculator/internal/adapters/primary/rest"
@@ -41,25 +41,19 @@ import (
 
 // @securityDefinitions.basic  BasicAuth
 func main() {
-	// Get current dir
-	currentDir, err := os.Getwd()
-	if err != nil {
-		log.Fatalf("Error getting current directory: %v", err)
-	}
-
 	// Load config with Viper (will check both .env file and environment variables)
-	cfg, err := config.LoadConfig(currentDir)
+	cfg, err := config.Load()
 	if err != nil {
 		log.Fatalf("Error loading configuration: %v", err)
 	}
 
 	// Set Gin mode based on environment
-	if cfg.Environment == "production" {
+	if cfg.Environment == constants.ProductionEnv {
 		gin.SetMode(gin.ReleaseMode)
 	}
 
 	// Initialize router
-	r := config.InitRouter()
+	r := gin.Default()
 
 	// Create global variables
 	var (
@@ -125,8 +119,9 @@ func main() {
 
 	// Create a new server with the router
 	server := &http.Server{
-		Addr:    addr,
-		Handler: r,
+		Addr:              addr,
+		Handler:           r,
+		ReadHeaderTimeout: constants.ReadHeaderTimeout,
 	}
 
 	// Create a channel to listen for OS signals
@@ -149,12 +144,12 @@ func main() {
 	log.Println("Shutting down server...")
 
 	// Create a deadline context for shutdown
-	ctx, cancel := context.WithTimeout(context.Background(), 10*time.Second)
+	ctx, cancel := context.WithTimeout(context.Background(), constants.ShutdownTimeout)
 	defer cancel()
 
 	// Attempt graceful shutdown
 	if err := server.Shutdown(ctx); err != nil {
-		log.Fatalf("Server forced to shutdown: %v", err)
+		log.Printf("Server forced to shutdown: %v\n", err)
 	}
 
 	log.Println("Server gracefully stopped")

@@ -781,11 +781,11 @@
                 calculationError.classList.add('hidden');
                 calculationResult.classList.add('hidden');
                 
-                const result = await fetchAPI(CALCULATE_PACKS_ENDPOINT, 'POST', { itemsOrdered });
+                const result = await fetchAPI(CALCULATE_PACKS_ENDPOINT, 'POST', { items_ordered: itemsOrdered });
                 
                 // Display result
-                resultItemsOrdered.textContent = result.itemsOrdered.toLocaleString();
-                resultTotalItems.textContent = result.totalItems.toLocaleString();
+                resultItemsOrdered.textContent = result.items_ordered.toLocaleString();
+                resultTotalItems.textContent = result.total_items.toLocaleString();
                 
                 // Calculate total packs
                 let totalPacks = 0;

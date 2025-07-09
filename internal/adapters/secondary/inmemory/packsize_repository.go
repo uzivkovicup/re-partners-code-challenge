@@ -136,6 +136,7 @@ func (r *PackSizeRepository) Delete(id string) error {
 	}
 
 	delete(r.packSizes, id)
+
 	return nil
 }
 

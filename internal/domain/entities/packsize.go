@@ -9,8 +9,8 @@ import (
 type PackSize struct {
 	ID        string    `json:"id"`
 	Size      int       `json:"size"`
-	CreatedAt time.Time `json:"createdAt"`
-	UpdatedAt time.Time `json:"updatedAt"`
+	CreatedAt time.Time `json:"created_at"`
+	UpdatedAt time.Time `json:"updated_at"`
 }
 
 // NewPackSize creates a new pack size entity
@@ -20,6 +20,7 @@ func NewPackSize(size int) (*PackSize, error) {
 	}
 
 	now := time.Now()
+
 	return &PackSize{
 		Size:      size,
 		CreatedAt: now,
@@ -32,6 +33,7 @@ func (p *PackSize) Validate() error {
 	if p.Size <= 0 {
 		return errors.New("pack size must be greater than zero")
 	}
+
 	return nil
 }
 
@@ -43,5 +45,6 @@ func (p *PackSize) Update(size int) error {
 
 	p.Size = size
 	p.UpdatedAt = time.Now()
+
 	return nil
 }

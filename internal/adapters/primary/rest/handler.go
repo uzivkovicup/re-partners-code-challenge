@@ -6,6 +6,7 @@ import (
 
 	"github.com/gin-gonic/gin"
 
+	stderr "errors"
 	"go-pack-calculator/internal/domain/entities"
 	"go-pack-calculator/internal/domain/errors"
 	"go-pack-calculator/internal/ports/primary"
@@ -31,20 +32,21 @@ func NewPackCalculatorHandler(
 // RegisterRoutes registers the REST API routes
 func (h *PackCalculatorHandler) RegisterRoutes(r *gin.Engine) {
 	api := r.Group("/api")
-	{
-		// Pack size endpoints
-		packSizes := api.Group("/pack-sizes")
-		{
-			packSizes.GET("", h.GetAllPackSizes)
-			packSizes.POST("", h.CreatePackSize)
-			packSizes.GET("/:id", h.GetPackSizeByID)
-			packSizes.PUT("/:id", h.UpdatePackSize)
-			packSizes.DELETE("/:id", h.DeletePackSize)
-		}
 
-		// Calculation endpoint
-		api.POST("/calculate-packs", h.CalculatePacks)
+	// Pack size endpoints
+	{
+		packSizes := api.Group("/pack-sizes")
+
+		packSizes.GET("", h.GetAllPackSizes)
+		packSizes.POST("", h.CreatePackSize)
+		packSizes.GET("/:id", h.GetPackSizeByID)
+		packSizes.PUT("/:id", h.UpdatePackSize)
+		packSizes.DELETE("/:id", h.DeletePackSize)
 	}
+
+	// Calculation endpoint
+	api.POST("/calculate-packs", h.CalculatePacks)
+
 }
 
 // CreatePackSize godoc
@@ -62,12 +64,14 @@ func (h *PackCalculatorHandler) CreatePackSize(c *gin.Context) {
 	var req CreatePackSizeRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: "Invalid request: " + err.Error()})
+
 		return
 	}
 
 	packSize, err := h.packSizeService.CreatePackSize(req.Size)
 	if err != nil {
 		handleError(c, err)
+
 		return
 	}
 
@@ -105,6 +109,7 @@ func (h *PackCalculatorHandler) GetAllPackSizes(c *gin.Context) {
 		pagination, err := h.packSizeService.GetAllPackSizesWithPagination(page, limit)
 		if err != nil {
 			handleError(c, err)
+
 			return
 		}
 
@@ -124,6 +129,7 @@ func (h *PackCalculatorHandler) GetAllPackSizes(c *gin.Context) {
 		}
 
 		c.JSON(http.StatusOK, response)
+
 		return
 	}
 
@@ -131,6 +137,7 @@ func (h *PackCalculatorHandler) GetAllPackSizes(c *gin.Context) {
 	packSizes, err := h.packSizeService.GetAllPackSizes()
 	if err != nil {
 		handleError(c, err)
+
 		return
 	}
 
@@ -160,6 +167,7 @@ func (h *PackCalculatorHandler) GetPackSizeByID(c *gin.Context) {
 	packSize, err := h.packSizeService.GetPackSizeByID(id)
 	if err != nil {
 		handleError(c, err)
+
 		return
 	}
 
@@ -185,12 +193,14 @@ func (h *PackCalculatorHandler) UpdatePackSize(c *gin.Context) {
 	var req UpdatePackSizeRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: "Invalid request: " + err.Error()})
+
 		return
 	}
 
 	packSize, err := h.packSizeService.UpdatePackSize(id, req.Size)
 	if err != nil {
 		handleError(c, err)
+
 		return
 	}
 
@@ -211,6 +221,7 @@ func (h *PackCalculatorHandler) DeletePackSize(c *gin.Context) {
 	err := h.packSizeService.DeletePackSize(id)
 	if err != nil {
 		handleError(c, err)
+
 		return
 	}
 
@@ -232,12 +243,14 @@ func (h *PackCalculatorHandler) CalculatePacks(c *gin.Context) {
 	var req CalculationRequest
 	if err := c.ShouldBindJSON(&req); err != nil {
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: "Invalid request: " + err.Error()})
+
 		return
 	}
 
 	result, err := h.calculationService.CalculatePacksForOrder(req.ItemsOrdered)
 	if err != nil {
 		handleError(c, err)
+
 		return
 	}
 
@@ -247,11 +260,11 @@ func (h *PackCalculatorHandler) CalculatePacks(c *gin.Context) {
 // Helper function to handle errors
 func handleError(c *gin.Context, err error) {
 	switch {
-	case errors.ErrPackSizeNotFound == err:
+	case stderr.Is(err, errors.ErrPackSizeNotFound):
 		c.JSON(http.StatusNotFound, ErrorResponse{Error: err.Error()})
-	case errors.ErrInvalidPackSize == err || errors.ErrInvalidItemsOrdered == err:
+	case stderr.Is(err, errors.ErrInvalidPackSize) || stderr.Is(err, errors.ErrInvalidItemsOrdered):
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
-	case errors.ErrNoPackSizesAvailable == err:
+	case stderr.Is(err, errors.ErrNoPackSizesAvailable):
 		c.JSON(http.StatusBadRequest, ErrorResponse{Error: err.Error()})
 	default:
 		c.JSON(http.StatusInternalServerError, ErrorResponse{Error: "Internal server error"})

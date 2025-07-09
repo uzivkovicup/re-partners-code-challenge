@@ -52,6 +52,7 @@ func (uc *PackSizeUseCase) GetPackSizeByID(id string) (*entities.PackSize, error
 			Err: errors.ErrPackSizeNotFound,
 		}
 	}
+
 	return packSize, nil
 }
 

@@ -40,6 +40,7 @@ func RunMigrations(db *gorm.DB) error {
 	for _, m := range migrations {
 		if _, ok := applied[m.Version]; ok {
 			log.Printf("Migration %s already applied\n", m.Version)
+
 			continue
 		}
 
@@ -51,12 +52,14 @@ func RunMigrations(db *gorm.DB) error {
 
 		if err := m.Up(tx); err != nil {
 			tx.Rollback()
+
 			return fmt.Errorf("migration %s failed: %w", m.Version, err)
 		}
 
 		// Record the migration
 		if err := tx.Create(&Migration{Version: m.Version}).Error; err != nil {
 			tx.Rollback()
+
 			return fmt.Errorf("failed to record migration %s: %w", m.Version, err)
 		}
 
@@ -67,5 +70,6 @@ func RunMigrations(db *gorm.DB) error {
 
 		log.Printf("Applied migration: %s\n", m.Version)
 	}
+
 	return nil
 }

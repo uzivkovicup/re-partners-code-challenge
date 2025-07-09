@@ -84,8 +84,8 @@ func (s *PackCalculatorService) CalculateOptimalPacks(itemsOrdered int, packSize
 	}
 
 	// Find the best solution that meets or exceeds the order
-	var bestTotal int = -1
-	var bestPacks int = -1
+	var bestTotal int
+	var bestPacks int
 
 	// First find all valid solutions (those that meet or exceed the order)
 	validSolutions := make([]int, 0)

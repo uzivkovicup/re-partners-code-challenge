@@ -31,5 +31,6 @@ func List() []Migration {
 	for _, k := range keys {
 		result = append(result, registry[k])
 	}
+
 	return result
 }
